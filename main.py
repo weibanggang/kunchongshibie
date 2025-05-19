@@ -1,5 +1,3 @@
-import os
-import time
 import cv2
 import khandy
 import numpy as np
@@ -12,7 +10,18 @@ import base64
 from collections import OrderedDict
 from flask_cors import CORS
 import sys
+import os
 
+# 假设字体文件在项目根目录下
+font_path = os.path.join(os.path.dirname(__file__), 'font/simsun.ttc')
+
+print(f"字体路径: {font_path}")  # 用于调试，查看实际路径
+
+# 检查文件是否存在
+if not os.path.exists(font_path):
+    print(f"错误：字体文件不存在 - {font_path}")
+else:
+    print("字体文件存在")
 app = Flask(__name__)
 # 初始化Flask应用
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
@@ -90,7 +99,7 @@ def process_image(image, detector, identifier):
         cv2.rectangle(image_for_draw, (box[0], box[1]), (box[2], box[3]), (0, 255, 0), 2)
 
         # 绘制文本
-        image_for_draw = khandy.draw_text(image_for_draw, text, position, font='simsun.ttc', font_size=15)
+        image_for_draw = khandy.draw_text(image_for_draw, text, position,  font=str(font_path), font_size=15)
 
     return image_for_draw, results, identifyCount
 
